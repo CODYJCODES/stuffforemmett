@@ -1,27 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suggestion Box</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header>
-        <h1>Welcome to the Suggestion Box</h1>
-    </header>
-    <main>
-        <form id="suggestionForm">
-            <label for="suggestion">Enter your suggestion:</label>
-            <input type="text" id="suggestion" name="suggestion" required>
-            <button type="submit">Submit</button>
-        </form>
-        <button id="toggleButton">Toggle Suggestions</button>
-        <div id="suggestions" style="display: none;">
-            <h2>All Suggestions</h2>
-            <ul id="suggestionList"></ul>
-        </div>
-    </main>
-    <script src="scripts.js"></script>
-</body>
-</html>
+// scripts.js
+
+const suggestionForm = document.getElementById('suggestionForm');
+const suggestionList = document.getElementById('suggestionList');
+const toggleButton = document.getElementById('toggleButton');
+let suggestions = [];
+let showingSuggestions = false;
+
+// Function to render suggestions
+function renderSuggestions() {
+  suggestionList.innerHTML = suggestions.map(suggestion => `<li>${suggestion}</li>`).join('');
+}
+
+// Event listener for form submission
+suggestionForm.addEventListener('submit', event => {
+  event.preventDefault();
+  const suggestionInput = document.getElementById('suggestion');
+  const suggestion = suggestionInput.value.trim();
+  if (suggestion !== '') {
+    suggestions.push(suggestion);
+    suggestionInput.value = '';
+    if (showingSuggestions) {
+      renderSuggestions();
+    }
+  } else {
+    alert('Please enter a suggestion');
+  }
+});
+
+// Event listener for toggle button
+toggleButton.addEventListener('click', () => {
+  showingSuggestions = !showingSuggestions;
+  const suggestionsDiv = document.getElementById('suggestions');
+  if (showingSuggestions) {
+    renderSuggestions();
+    suggestionsDiv.style.display = 'block';
+    toggleButton.textContent = 'Hide Suggestions';
+  } else {
+    suggestionsDiv.style.display = 'none';
+    toggleButton.textContent = 'Show Suggestions';
+  }
+});
